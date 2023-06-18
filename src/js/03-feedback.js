@@ -8,6 +8,7 @@ const STORAGE_KEY = 'feedback-form-state';
 
 let formData = {};
 
+
 formEl.addEventListener('input', throttle(onFormInput, 500));
 formEl.addEventListener('submit', onFormSubmit);
 
