@@ -15,7 +15,7 @@ populareForm = {};
 
 function onFormSubmit(ev) {
     ev.preventDefaunt();
-    
+
     if (textareaEl.value === '' || inputEl.value === '') {
         return alert('Заповніть всі поля');
 
