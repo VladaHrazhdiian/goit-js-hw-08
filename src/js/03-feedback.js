@@ -1,47 +1,39 @@
 import throttle from 'lodash.throttle';
 
-const inputEl = document.querySelector('.feedback-form input');
-const textareaEl = document.querySelector('.feedback-form textarea');
-const formEl = document.querySelector('.feedback-form');
+const formRef = document.querySelector('.feedback-form');
+const inputRef = document.querySelector('[name="email"]');
+const textAreaRef = document.querySelector('[name="message"]');
 
-const STORAGE_KEY = 'feedback-form-state';
+onResetPage();
 
-let formData = {};
+formRef.addEventListener('input', throttle(onInputHandler, 500));
 
+function onInputHandler(e) {
+  let currentLocalStorage = localStorage.setItem(
+    'feedback-form-state',
+    JSON.stringify({ email: inputRef.value, message: textAreaRef.value }),
+  );
+  currentLocalStorage ? JSON.parse(localStorage.getItem('feedback-form-state')) : {};
+};
 
-formEl.addEventListener('input', throttle(onFormInput, 500));
-formEl.addEventListener('submit', onFormSubmit);
+formRef.addEventListener('submit', onSubmitHandler);
 
-populateForm();
+function onSubmitHandler(e) {
+  e.preventDefault();
+  
+  const formData = new FormData(formRef);
+  formData.forEach((value, name) => console.log(value, name));
 
-function onFormSubmit(ev) {
-  ev.preventDefault();
+  localStorage.removeItem('feedback-form-state');
+  e.currentTarget.reset();
+};
 
-  if (textareaEl.value === '' || inputEl.value === '') {
-    return alert('Заповніть всі поля');
+function onResetPage() {
+  let currentLocalStorage = localStorage.getItem('feedback-form-state');
+  if (currentLocalStorage) {
+    currentLocalStorage = JSON.parse(currentLocalStorage);
+    Object.entries(currentLocalStorage).forEach(([name, value]) => {
+      formRef.elements[name].value = value;
+    });
   }
-
-  console.log(formData);
-
-  ev.currentTarget.reset();
-  localStorage.removeItem(STORAGE_KEY);
-  formData = {};
-}
-function onFormInput(ev) {
-  formData[ev.target.name] = ev.target.value;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
-}
-
-function populateForm() {
-  const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY));
-
-  if (savedData.email) {
-    inputEl.value = savedData.email;
-    formData.email = savedData.email;
-  }
-
-  if (savedData.message) {
-    textareaEl.value = savedData.message;
-    formData.message = savedData.message;
-  }
-}
+};
