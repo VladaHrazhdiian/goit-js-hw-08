@@ -11,6 +11,7 @@ let formData = {};
 formEl.addEventListener('input', throttle(onFormInput, 500));
 formEl.addEventListener('submit', onFormSubmit);
 
+populateForm();
 
 function onFormSubmit(ev) {
   ev.preventDefault();
