@@ -18,7 +18,7 @@ function onFormSubmit(ev) {
   ev.preventDefault();
 
   if (textareaEl.value === '' || inputEl.value === '') {
-    errorMessageEl.textContent = 'Please fill in all fields.';
+    errorMessageEl.innerText = 'Please fill in all fields.';
     errorMessageEl.style.display = 'block';
     return;
   }
