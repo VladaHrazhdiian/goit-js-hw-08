@@ -3,7 +3,6 @@ import throttle from 'lodash.throttle';
 const inputEl = document.querySelector('.feedback-form input');
 const textareaEl = document.querySelector('.feedback-form textarea');
 const formEl = document.querySelector('.feedback-form');
-const errorMessageEl = document.querySelector('.error-message');
 
 const STORAGE_KEY = 'feedback-form-state';
 
@@ -18,9 +17,7 @@ function onFormSubmit(ev) {
   ev.preventDefault();
 
   if (textareaEl.value === '' || inputEl.value === '') {
-    errorMessageEl.innerText = 'Please fill in all fields.';
-    errorMessageEl.style.display = 'block';
-    return;
+    return alert('Заповніть всі поля');
   }
 
   console.log(formData);
@@ -29,11 +26,9 @@ function onFormSubmit(ev) {
   localStorage.removeItem(STORAGE_KEY);
   formData = {};
 }
-
 function onFormInput(ev) {
   formData[ev.target.name] = ev.target.value;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
-  errorMessageEl.style.display = 'none';
 }
 
 function populateForm() {
